@@ -1,0 +1,61 @@
+you deploy it in windows as well if you want 
+
+install choclatey for easy dowload of any apps
+
+go to this and copy paste commands https://chocolatey.org/install
+
+choco --version
+
+choco install openjdk -y
+
+choco install maven 
+
+choco install git
+
+make sure after installing close windows poweshell terminal and reopen so that enviroment files are set.
+if not you need to manullay set. [ in winds search type env and account/sys env  click on path and add new path in that ]
+
+now clone the project git clone https://github.com/kunchalaravinder93/project-1-maven-jenkins-CICD-docker-eks-
+
+cd  project-1-maven-jenkins-CICD-docker-eks-
+ mvn clean package
+you will get a war file.  in webapps - target - webapp.war
+
+----------------------------------------------------------------
+INSTALL TOMCAT ON WINDOWS
+-----------------------------
+GO TO OFFICAIL PAGE AND CLICK ON WINDOWS DOWNLOAD OPTION AND IT WILL BE DOWNLOADED IN WINDOWS
+A ZIP FILE WILL BE CREATED AND EXTRACT ALL FILES 
+     [OPTIONAL]NOW COPY THE PATH AND ADD IN ENVIRONMENT 
+GO TO THE BIN PATH IN TOMACT AND TYPE CMD IN SEARCH BAR 
+MAKE SURE IN SAME PATH  C:\path\to\apache-tomcat\bin
+startup.bat
+
+Step 2: Configure Windows Firewall to Allow External Access
+By default, Tomcat runs on port 8080, but Windows Firewall might block it.
+
+Open Windows Defender Firewall → Click Advanced Settings.
+Click Inbound Rules → Click New Rule (Right side panel).
+Select Port → Click Next.
+Choose TCP and enter 8080 in "Specific local ports".
+Click Allow the connection → Click Next.
+Check Public, Private, Domain → Click Next.
+Name it Tomcat 8080 Rule → Click Finish.
+Now, your EC2 instance should allow connections on port 8080.
+
+
+MAKE SURE YOU CHANGE TO COMMENT FILE IN WEBAPPS/MANAGE/META-INFO/CONTEXT.XML [COMMENT FILE]
+AND CONF/TOMACT-USERS.XML [ADD USER]
+
+
+If you want Tomcat to start automatically when EC2 boots:
+
+Open a command prompt as Administrator.
+Navigate to Tomcat's bin/ folder:
+cd C:\path\to\apache-tomcat\bin
+service.bat install 
+net start Tomcat9
+(Replace Tomcat9 with your Tomcat version)
+Now, Tomcat will start automatically on EC2 reboots.
+
+
