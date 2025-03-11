@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows Update Effect</title>
+    <title>Wings Effect</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600&display=swap');
 
@@ -18,6 +18,34 @@
             height: 100vh;
             overflow: hidden;
             position: relative;
+        }
+
+        .wings {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .wing-effect::before,
+        .wing-effect::after {
+            content: "";
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(0, 120, 215, 0.7) 0%, rgba(0, 43, 92, 0) 70%);
+            top: 20%;
+            left: -30%;
+            transform: rotate(-30deg);
+            border-radius: 50% 50% 0 0;
+            opacity: 0.5;
+            filter: blur(50px);
+        }
+
+        .wing-effect::after {
+            left: auto;
+            right: -30%;
+            transform: rotate(30deg);
         }
 
         .bubble {
@@ -101,11 +129,12 @@
     </style>
 </head>
 <body>
+    <div class="wings wing-effect"></div>
     <div class="bubble bubble-1"></div>
     <div class="bubble bubble-2"></div>
 
     <div class="container">
-        <h1>🚀 BLUWINGS REGISTRATIONS</h1>
+        <h1>🪽 Winged Form</h1>
         <p>Keep your future updated and secure! 🔒</p>
         <hr>
 
@@ -116,11 +145,11 @@
             <input type="password" placeholder="🔑 Password" pattern=".{6,}" required>
             <input type="password" placeholder="🔁 Confirm Password" required>
             <hr>
-            <button type="submit" class="registerbtn">🔄 Update Now</button>
+            <button type="submit" class="registerbtn">🔄 Register Now</button>
         </form>
 
         <div class="signin">
-            <p>Already updated? <a href="#">Sign in</a> to continue! 💻</p>
+            <p>Already registered? <a href="#">Sign in</a> to continue! 💻</p>
         </div>
     </div>
 </body>
