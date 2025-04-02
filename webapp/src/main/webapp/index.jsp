@@ -134,7 +134,7 @@
     <div class="bubble bubble-2"></div>
 
     <div class="container">
-        <h1> Botttt Registrations</h1>
+        <h1> Harish Registrations</h1>
         <p>Keep your future updated and secure! 🔒</p>
         <hr>
 
