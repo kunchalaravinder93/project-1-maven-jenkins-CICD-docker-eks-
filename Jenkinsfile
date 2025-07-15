@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TOMCAT_URL = 'http://3.110.55.31:8080/manager/text/deploy?path=/sample&update=true'
+        TOMCAT_URL = 'http://52.14.225.193:8080/manager/text/deploy?path=/sample&update=true'
     }
 
     stages {
