@@ -1,0 +1,87 @@
+pipeline {
+    agent any
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+        SONAR_URL = 'http://3.141.166.235:9000'
+        SONAR_PROJECT_KEY = 'webapp'
+        SONAR_PROJECT_NAME = 'webapp'
+        SONAR_TOKEN = credentials('sonar-token')
+    }
+
+    stages {
+
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/kunchalaravinder93/project-1-maven-jenkins-CICD-docker-eks-.git'
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                echo "Running SonarQube Analysis..."
+                sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                    -Dsonar.projectName=${SONAR_PROJECT_NAME} \
+                    -Dsonar.host.url=${SONAR_URL} \
+                    -Dsonar.login=${SONAR_TOKEN} \
+                    -Dsonar.java.binaries=.
+                '''
+            }
+        }
+
+        stage('Build Package') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('OWASP Dependency Check') {
+            steps {
+                echo "Running OWASP Dependency Check..."
+                dependencyCheck additionalArguments: '--scan /var/lib/jenkins/workspace/soanr-owasp-cicd/webapp/target/ --format ALL --out /var/lib/jenkins/workspace/soanr-owasp-cicd/webapp/target', odcInstallation: 'owasp'
+            }
+        }
+
+        stage('Publish OWASP Report') {
+            steps {
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: '/var/lib/jenkins/workspace/soanr-owasp-cicd/webapp/target',
+                    reportFiles: 'dependency-check-report.html',
+                    reportName: 'OWASP Dependency Check Report'
+                ])
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                echo 'Deploying WAR file to Tomcat...'
+                sh '''
+                     rm -f /opt/apache-tomcat-9.0.111/webapps/webapp.war
+            sudo rm -rf /opt/apache-tomcat-9.0.111/webapps/webapp
+            cp /var/lib/jenkins/workspace/soanr-owasp-cicd/webapp/target/webapp.war /opt/apache-tomcat-9.0.111/webapps/
+                '''
+                echo 'Deployment successful (Tomcat restarted via scripts).'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline execution completed.'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
+        }
+    }
+}
