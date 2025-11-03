@@ -1,0 +1,72 @@
+TO INSTALL AND RUN SONAR QUBE 
+-------------------------------
+
+
+
+--- Docker Installation ---
+
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo apt install docker-compose
+
+service docker restart
+sudo usermod -aG docker $USER
+newgrp docker
+sudo chmod 666 /var/run/docker.sock
+sudo systemctl restart docker
+
+
+# TO ISNTALL SONARQUBE USING DOCKER RUN BELOW COMMAND  
+docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+
+
+================================================================================
+
+
+sudo visudo
+jenkins ALL=(ALL) NOPASSWD: ALL
+
+-----------------------------
+
+OPTIONAL CHECK TOMCAT VERSIONS AND REPLACE
+
+ sudo chown -R jenkins:jenkins /opt/apache-tomcat-10.1.48/webapps
+  sudo chmod -R 755 /opt/apache-tomcat-10.1.48/webapps
+
+-----------------------------------------------------------
+MAKE SURE TO INSTALL PLUGINS IN JENKINS
+SONAR SCANNER
+OWASP DEPENDECY CHECKER
+HTML PUBLISHER
+----------------------------------------------
+CONFIGURE JENKINS  GOT TO TOOLS IN MANAGE JANEKINS CONFIGURE SONAR SCANNER AND OWASP DEOEDENCY CHECKER
+AND ASLO ADD SONAR SERVER IN SYSTEM CONFIGURE GLOBAL TOOLS  
+GIVE SONAR SERVER URL AND SONAR TOKEN
+--HOW TO GENERATE TOKE GOT OT SONARQUBE -->Administration --> SECURITY -->USERS ---> CLICK ON TOKEN AND GIVE NAME AND GENERATE
+--OPTIONAL WEBHOOKS
+TO ADD JENKINS SERVER IN SONARQUBE 
+Administration-->CONFIGURATION--> WEBHOOKS -- URL SHOULD BE LIKE 
+⚙️ How to Set It Up
+
+Go to SonarQube → Administration → Configuration → Webhooks
+
+Click Create
+Name: Jenkins
+URL:
+http://3.141.166.235:8080/sonarqube-webhook/
+Save
+---------------------------------------------------------------------------------------------------------
